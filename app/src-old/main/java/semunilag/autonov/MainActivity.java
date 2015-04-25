@@ -9,8 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import semunilag.autonov.fragments.BluetoothFragment;
-
 
 public class MainActivity extends ActionBarActivity {
 

@@ -1,0 +1,8 @@
+TODO:
+    Implement Bluetooth Fragment -> Picks up a selected Bluetooth Device,
+    Connects to it, Listens for incoming data
+    Displays information on the UI
+    Stores data to Memory for Logging and post-race analysis
+
+TODO:
+    Implement VoWLAN Section of the Application
