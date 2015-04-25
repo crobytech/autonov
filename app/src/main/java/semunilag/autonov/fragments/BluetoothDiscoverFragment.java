@@ -22,16 +22,16 @@ import semunilag.autonov.R;
 import semunilag.autonov.adapters.BlueToothListAdapter;
 
 
-public class BluetoothFragment extends ListFragment {
+public class BluetoothDiscoverFragment extends ListFragment {
 
     BluetoothAdapter mAdapter;
     BlueToothListAdapter mListAdapter = null;
-    private final static String LOG_TAG = BluetoothFragment.class.getSimpleName();
+    private final static String LOG_TAG = BluetoothDiscoverFragment.class.getSimpleName();
     private final static int REQUEST_ENABLE_BT = 101;
 
     onBluetoothDeviceSelectedListener mListener;
 
-    public BluetoothFragment(){
+    public BluetoothDiscoverFragment(){
 
     }
 
@@ -91,7 +91,8 @@ public class BluetoothFragment extends ListFragment {
         if (mAdapter.isDiscovering()){
             mAdapter.cancelDiscovery();
         }
-
+        BluetoothDevice selectedDevice = deviceArrayList.get(position);
+        mListener.onBluetoothDeviceSelected(selectedDevice);
     }
 
 

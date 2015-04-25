@@ -5,6 +5,7 @@ package semunilag.autonov;
  */
 public class Constants {
 
-    public static int DEVICE_CONNECTED = 100;
-    public static int DEVICE_SOCKET_OPENED = 101;
+    public static final int DEVICE_CONNECTED = 100;
+    public static final int DEVICE_SOCKET_OPENED = 101;
+    public static final String DEVICE_TO_CONNECT = "device_to_connect";
 }

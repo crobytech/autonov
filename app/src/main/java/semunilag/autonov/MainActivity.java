@@ -1,5 +1,7 @@
 package semunilag.autonov;
 
+import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothDevice;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,17 +11,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import semunilag.autonov.fragments.BluetoothFragment;
+import semunilag.autonov.fragments.BluetoothDiscoverFragment;
+import semunilag.autonov.fragments.BluetoothConnectFragment;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements BluetoothDiscoverFragment.onBluetoothDeviceSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            BluetoothFragment bluetoothFragment = new BluetoothFragment();
+            BluetoothDiscoverFragment bluetoothFragment = new BluetoothDiscoverFragment();
             getFragmentManager().beginTransaction()
                     .add(R.id.container1, bluetoothFragment)
                     .commit();
@@ -49,19 +52,19 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    @Override
+    public void onBluetoothDeviceSelected(BluetoothDevice device) {
+        /*
+            Once a device has been picked switch fragments to the one that will handle connection from here onwards
+         */
+        Bundle mBundle = new Bundle();
+        mBundle.putParcelable(Constants.DEVICE_TO_CONNECT, device);
 
-        public PlaceholderFragment() {
-        }
+        BluetoothConnectFragment bluetoothConnectFragment = new BluetoothConnectFragment();
+        bluetoothConnectFragment.setArguments(mBundle);
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container1, bluetoothConnectFragment);
+        transaction.commit();
     }
 }
