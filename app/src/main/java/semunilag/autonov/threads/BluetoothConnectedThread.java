@@ -6,7 +6,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.logging.Handler;
+import android.os.Handler;
 
 /**
  * Created by teliov on 1/18/00.
@@ -16,15 +16,20 @@ public class BluetoothConnectedThread extends Thread{
 
     private static String LOG_TAG = BluetoothConnectedThread.class.getSimpleName();
     private final BluetoothSocket mSocket;
-    private final InputStream mInputStream;
-    private final OutputStream mOutputStream;
+    private InputStream mInputStream;
+    private OutputStream mOutputStream;
     private final Handler mHandler;
 
     public BluetoothConnectedThread(BluetoothSocket socket, Handler handler){
         mHandler = handler;
+        mSocket = socket;
+    }
+
+    public void run(){
+        Log.i(LOG_TAG, "Beginning Connected Thread handler");
+
         InputStream tmpInputStream = null;
         OutputStream tmpOutputStream = null;
-        mSocket = socket;
 
         try {
             tmpInputStream = mSocket.getInputStream();
@@ -36,10 +41,7 @@ public class BluetoothConnectedThread extends Thread{
 
         mInputStream = tmpInputStream;
         mOutputStream = tmpOutputStream;
-    }
 
-    public void run(){
-        Log.i(LOG_TAG, "Beginning Connected Thread handler");
         byte[] buffer = new byte[1024];
         int bytes;
 

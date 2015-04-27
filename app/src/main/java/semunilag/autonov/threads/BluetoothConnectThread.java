@@ -20,9 +20,10 @@ public class BluetoothConnectThread extends Thread{
     private static String LOG_TAG = BluetoothConnectThread.class.getSimpleName();
 
     private final Handler mHandler;
-    private final BluetoothSocket mSocket;
+    private BluetoothSocket mSocket;
     private final BluetoothDevice mDevice;
-    private static final UUID H606_UUID = UUID.fromString("");
+    private static final UUID H606_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private BluetoothConnectedThread mConnectedThread;
 
 
     public BluetoothConnectThread(BluetoothDevice device, Handler handler){
@@ -30,22 +31,28 @@ public class BluetoothConnectThread extends Thread{
         mDevice = device;
         mHandler = handler;
 
-        try{
+        /*try{
             tmpSocket = mDevice.createRfcommSocketToServiceRecord(H606_UUID);
         }catch (IOException e){
             Log.e(LOG_TAG, "Unable to obtain bluetooth socket");
             Log.e(LOG_TAG, e.toString());
         }
-        mSocket = tmpSocket;
+        mSocket = tmpSocket;*/
     }
 
     public void run(){
         Log.i(LOG_TAG, "Attempting to Connect to Device");
 
         try{
+            mSocket = mDevice.createInsecureRfcommSocketToServiceRecord(H606_UUID);
             mSocket.connect();
             //send connected message to the UI
-            Message msg = mHandler.obtainMessage(Constants.DEVICE_SOCKET_OPENED, mSocket);
+            String deviceName = mDevice.getName();
+            mHandler.obtainMessage(Constants.DEVICE_SOCKET_OPENED, deviceName).sendToTarget();
+
+            mConnectedThread = new BluetoothConnectedThread(mSocket, mHandler);
+            mConnectedThread.run();
+
         }catch (IOException e){
             Log.e(LOG_TAG, "Unable to connect to device");
             Log.e(LOG_TAG, e.toString());
@@ -54,6 +61,9 @@ public class BluetoothConnectThread extends Thread{
     }
 
     public void cancel(){
+        if (mConnectedThread != null){
+            mConnectedThread.cancel();
+        }
         try {
             mSocket.close();
         }catch (IOException e){
@@ -61,8 +71,4 @@ public class BluetoothConnectThread extends Thread{
             Log.e(LOG_TAG, e.toString());
         }
     }
-
-    public void connected(){
-    }
-
 }

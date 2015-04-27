@@ -3,14 +3,21 @@ package semunilag.autonov.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.os.Handler;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.logging.LogRecord;
@@ -24,13 +31,14 @@ import semunilag.autonov.threads.BluetoothConnectedThread;
  * Created by teliov on 1/18/00.
  */
 public class BluetoothConnectFragment extends Fragment{
+
+    private static String LOG_TAG = BluetoothConnectFragment.class.getSimpleName();
     private BluetoothDevice mDevice;
     private BluetoothConnectThread mConnectThread;
-    private BluetoothConnectedThread mConnectedThread;
-
 
     public BluetoothConnectFragment() {
-        super();
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -92,21 +100,51 @@ public class BluetoothConnectFragment extends Fragment{
             mConnectThread.start();
         }else{
             //TODO: do something if this happens
+            Log.e(LOG_TAG, "No arguments for this Fragment");
         }
     }
 
-    private static final Handler mHandler = new Handler(){
+    private final Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case Constants.DEVICE_CONNECTED:
-                    //TODO: start BluetoothConnect Thread
-                    break;
-
                 case Constants.DEVICE_SOCKET_OPENED:
-                    //TODO: start BluetoothConnected Thread
+                    //TODO: start BluetoothConnect Thread
+                    String deviceName = (String)msg.obj;
+                    removeProgressBar(deviceName);
                     break;
             }
         }
     };
+
+    private void  removeProgressBar(String deviceName){
+        Toast.makeText(getActivity(), "Connected to " +  deviceName, Toast.LENGTH_SHORT).show();
+        ProgressBar progressBar = (ProgressBar)getActivity().findViewById(R.id.connecting_progressbar);
+        LinearLayout linearLayout = (LinearLayout)getActivity().findViewById(R.id.connected);
+        progressBar.setVisibility(View.GONE);
+        linearLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.bluetooth_connected_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.bluetooth_stop_menu:
+                //End the connection
+                if (mConnectThread != null){
+                    mConnectThread.cancel();
+                }
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
