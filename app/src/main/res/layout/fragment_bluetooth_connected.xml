@@ -6,18 +6,106 @@
     <ProgressBar
         android:id="@+id/connecting_progressbar"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/connected"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="horizontal"
             android:layout_height="match_parent"
-            android:text="Waiting for data"/>
+            android:layout_weight="1">
+
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_list_icon"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:id="@+id/temperature_display"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/abc_text_size_body_2_material"
+                android:layout_weight="1"
+                android:text="50 C"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="horizontal"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_list_icon"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/voltage_display"
+                android:gravity="center"
+                android:textSize="@dimen/abc_text_size_body_2_material"
+                android:layout_weight="1"
+                android:text="50 C"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="horizontal"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_list_icon"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:id="@+id/current_display"
+                android:textSize="@dimen/abc_text_size_body_2_material"
+                android:layout_weight="1"
+                android:text="50 C"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="horizontal"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_list_icon"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:id="@+id/soc_display"
+                android:textSize="@dimen/abc_text_size_body_2_material"
+                android:layout_weight="1"
+                android:text="50 C"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

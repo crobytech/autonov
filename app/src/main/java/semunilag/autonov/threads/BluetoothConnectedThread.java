@@ -37,24 +37,32 @@ public class BluetoothConnectedThread extends Thread{
         }catch (IOException e){
             Log.e(LOG_TAG, "Error Obtaining Input/Outpitstream from Socket");
             Log.e(LOG_TAG, e.toString());
-        }
+        }finally {
+            if (tmpInputStream != null && tmpOutputStream != null){
+                mInputStream = tmpInputStream;
+                mOutputStream = tmpOutputStream;
 
-        mInputStream = tmpInputStream;
-        mOutputStream = tmpOutputStream;
+                byte[] buffer = new byte[4];
+                int bytes;
 
-        byte[] buffer = new byte[1024];
-        int bytes;
-
-        while(true){
-            try{
-                bytes = mInputStream.read(buffer);
-            }catch (IOException e){
-                Log.e(LOG_TAG, "unable to obtain data from device input stream");
-                Log.e(LOG_TAG, e.toString());
-                //TODO: Add Handler for Bluetooth Connection Lost
-                break;
+                while(true){
+                    try{
+                        Log.i(LOG_TAG, "Beginning Connected Thread handler");
+                        bytes = mInputStream.read();
+                        Log.d(LOG_TAG, "bytes in " + Integer.toString(bytes));
+                        Log.d(LOG_TAG, "from input stream " + buffer.toString());
+                    }catch (IOException e){
+                        Log.e(LOG_TAG, "unable to obtain data from device input stream");
+                        Log.e(LOG_TAG, e.toString());
+                        //TODO: Add Handler for Bluetooth Connection Lost
+                        break;
+                    }
+                }
+            }else{
+                Log.e(LOG_TAG, "Something wrong happended");
             }
         }
+
     }
 
     public void write(byte[] buffer){
